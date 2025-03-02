@@ -13,9 +13,9 @@ const toRupiah = require('../helpers/toRupiah')
 dotenv.config()
 
 const { Payout: PayoutClient, Invoice: InvoiceClient, Balance: BalanceClient  } = require('xendit-node');
-const xenditPayoutClient = new PayoutClient({ secretKey: 'xnd_development_mkZ1EDWSeFNvcrZ2hkMGTZZuo3TSl9ar88LF8wHCcyffSZwGaqrSwwA70a8UyhS' });
-const xenditInvoice = new InvoiceClient({secretKey: 'xnd_development_mkZ1EDWSeFNvcrZ2hkMGTZZuo3TSl9ar88LF8wHCcyffSZwGaqrSwwA70a8UyhS'})
-const xenditBalanceClient = new BalanceClient({secretKey: 'xnd_development_mkZ1EDWSeFNvcrZ2hkMGTZZuo3TSl9ar88LF8wHCcyffSZwGaqrSwwA70a8UyhS'})
+const xenditPayoutClient = new PayoutClient({ secretKey: process.env.XENDIT_API_KEY });
+const xenditInvoice = new InvoiceClient({secretKey: process.env.XENDIT_API_KEY})
+const xenditBalanceClient = new BalanceClient({secretKey: process.env.XENDIT_API_KEY})
 
 const handlePaymentCallback = async (req, res) => {
     try {
@@ -223,7 +223,7 @@ const createPayment = async (req, res) => {
       "description" : description,
       "currency" : "IDR",
       "reminderTime" : 1,
-      "successRedirectUrl": "https://unipay-ikmi.vercel.app/successPayment",
+      "successRedirectUrl": "https://unipay-app.vercel.app/successPayment",
     }
 
     const response = await xenditInvoice.createInvoice({
