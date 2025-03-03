@@ -20,6 +20,7 @@ const xenditBalanceClient = new BalanceClient({secretKey: process.env.XENDIT_API
 const handlePaymentCallback = async (req, res) => {
     try {
         const callbackData = req.body;
+        console.log('callback', callbackData)
         await updateDatabase(callbackData.external_id, callbackData)
 
         return res.json({ status: 200, data: callbackData });
@@ -223,7 +224,7 @@ const createPayment = async (req, res) => {
       "description" : description,
       "currency" : "IDR",
       "reminderTime" : 1,
-      "successRedirectUrl": "https://unipay-app.vercel.app/successPayment",
+      "successRedirectUrl": "http://localhost:3000/successPayment",
     }
 
     const response = await xenditInvoice.createInvoice({
@@ -457,6 +458,8 @@ const updateDatabase = async (external_id, data) => {
 
     const external = external_id.split('OF_ID')
     const resultExternal = external[0]
+    console.log('ex_id', external_id)
+    console.log('resultExternal', resultExternal)
 
     const filterBalance = { NIM: resultExternal };
 
@@ -507,7 +510,7 @@ const getAllHistoryPayments = async (req, res) => {
     if(year) filter.year = year
     if(prodi) filter.prodi = prodi
 
-    const historyData = await historyTransaction.find(filter)
+    const historyData = await historyTransaction?.find(filter)?.sort({ created_at: -1 })?.limit(8)
     if(historyData === 0) return res.json({ status: 404, message: 'History not found!' }) 
 
     return res.json({ status: 200, message: 'Successfully get history payments!', data: historyData }) 
