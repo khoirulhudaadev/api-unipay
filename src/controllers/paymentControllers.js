@@ -510,7 +510,7 @@ const getAllHistoryPayments = async (req, res) => {
     if(year) filter.year = year
     if(prodi) filter.prodi = prodi
 
-    const historyData = await historyTransaction?.find(filter)?.sort({ created_at: -1 })?.limit(8)
+    const historyData = await historyTransaction?.find(filter)?.sort({ date: -1 })?.limit(8)
     if(historyData === 0) return res.json({ status: 404, message: 'History not found!' }) 
 
     return res.json({ status: 200, message: 'Successfully get history payments!', data: historyData }) 
